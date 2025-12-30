@@ -1,0 +1,211 @@
+:root {
+    --bg-gray: #F5F5F7;
+    --text-black: #1D1D1F;
+    --text-gray: #86868B;
+    --apple-blue: #0066CC;
+    --white: #FFFFFF;
+    --card-shadow: rgba(0, 0, 0, 0.08);
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", "Microsoft JhengHei", sans-serif; 
+}
+
+body { 
+    background-color: var(--white); 
+    color: var(--text-black); 
+    line-height: 1.5; 
+    overflow-x: hidden; 
+}
+
+/* 導覽列 - 增加磨砂玻璃質感 */
+header {
+    background: rgba(255, 255, 255, 0.8); 
+    backdrop-filter: blur(20px);
+    padding: 15px 50px; 
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    border-bottom: 1px solid #d2d2d7;
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
+}
+.logo { font-size: 20px; font-weight: 600; cursor: pointer; }
+.nav-right { display: flex; align-items: center; gap: 25px; }
+.nav-right span { cursor: pointer; font-size: 14px; transition: 0.3s; }
+.nav-right span:hover { color: var(--apple-blue); }
+.login-btn { border: 1px solid var(--text-black); padding: 6px 16px; border-radius: 20px; font-weight: 500; cursor: pointer; }
+
+/* 購物車側邊欄 */
+#cart-sidebar {
+    position: fixed; top: 0; right: -400px; width: 380px; height: 100%;
+    background: white; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    z-index: 3000; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); padding: 40px 30px;
+}
+#cart-sidebar.open { right: 0; }
+.cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #f2f2f2; padding-bottom: 15px; }
+
+/* 首頁 - 質感強化 */
+#home-page { 
+    text-align: center; 
+    padding: 100px 20px; 
+    background: radial-gradient(circle at center, #ffffff 0%, #f5f5f7 100%); 
+}
+.hero-title { font-size: 64px; font-weight: 600; margin-bottom: 15px; letter-spacing: -2px; }
+.hero-btn { background: var(--apple-blue); color: white; padding: 14px 40px; border-radius: 30px; border: none; cursor: pointer; font-size: 17px; transition: 0.3s; }
+.hero-btn:hover { background: #004499; transform: scale(1.05); }
+
+
+/* 修正後的封面容器 */
+/* 封面容器：確保有足夠空間顯示大圖 */
+/* 修正後的封面容器 */
+/* 封面容器 */
+/* 1. 修正容器：確保它是一個有明確範圍的基準點 */
+.hero-visual {
+    position: relative;
+    width: 100%;
+    max-width: 900px; 
+    height: 450px;    
+    margin: 20px auto; 
+    overflow: visible; /* 暫時改成 visible 方便觀察 */
+    display: block;    /* 取消 flex，避免干擾絕對定位 */
+}
+
+/* 2. 修正圖片：使用特殊的強制居中定位 */
+.hero-img {
+    position: absolute;
+    bottom: 0;
+    left: 0;           /* 改為從左邊 0 開始 */
+    right: 0;          /* 右邊也 0 */
+    margin: 0 auto;    /* 配合 left/right 為 0，margin auto 會強迫圖片在中間 */
+    width: auto;
+    max-width: 100%;    
+    max-height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    display: block;
+    pointer-events: none; /* 讓滑鼠可以點穿圖片，點到後面的按鈕 */
+}
+
+.hero-img.active {
+    opacity: 1;
+}
+/* 確保按鈕在圖片前面 */
+.hero-btn {
+    position: relative;
+    z-index: 10; 
+    margin-top: 20px;
+}
+.feature-container {
+    display: flex; 
+    justify-content: center; 
+    gap: 30px; 
+    margin-top: 60px; 
+    flex-wrap: wrap;
+}
+.feature-mini-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 22px;
+    width: 220px;
+    box-shadow: 0 10px 30px var(--card-shadow);
+    transition: 0.3s;
+    cursor: pointer;
+    border: 1px solid #f2f2f2;
+}
+.feature-mini-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+
+.container { display: flex; max-width: 1200px; margin: 40px auto; padding: 0 20px; min-height: 700px; }
+aside { width: 200px; flex-shrink: 0; }
+aside h3 { font-size: 12px; color: var(--text-gray); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+aside li { margin-bottom: 15px; cursor: pointer; font-size: 15px; transition: 0.2s; color: var(--text-black); }
+aside li:hover, aside li.active { color: var(--apple-blue); font-weight: 600; }
+
+main { flex-grow: 1; margin-left: 60px; }
+
+
+.shop-tools { display: flex; gap: 15px; margin-bottom: 30px; }
+.shop-tools input, .shop-tools select {
+    padding: 12px 16px; border-radius: 12px; border: 1px solid #d2d2d7; font-size: 14px; outline: none; background: var(--bg-gray);
+}
+
+
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; }
+.product-card {
+    background: var(--bg-gray); padding: 40px 20px; border-radius: 24px; text-align: center;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: 1px solid transparent;
+}
+.product-card:hover { border-color: #d2d2d7; background: #fff; transform: translateY(-8px); box-shadow: 0 20px 40px var(--card-shadow); }
+.product-card img { max-width: 100%; height: 180px; object-fit: contain; margin-bottom: 20px; transition: 0.3s; }
+.product-card:hover img { transform: scale(1.05); }
+
+.product-name { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 18px; font-weight: 600; }
+.product-price-label { font-size: 14px; color: var(--text-gray); margin-top: 5px; }
+
+
+.badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.badge.max { background: #1d1d1f; color: #d4af37; border: 1px solid #d4af37; }
+.badge.pro { background: #1d1d1f; color: #ffffff; }
+.badge.std { background: #e8e8ed; color: #86868b; border: 1px solid #d2d2d7; }
+
+
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+.modal-content { background: white; padding: 40px; border-radius: 30px; width: 90%; max-width: 850px; display: flex; gap: 40px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
+.compare-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+.compare-table th, .compare-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; }
+.best-value { background: #eefbff; color: var(--apple-blue); font-weight: 700; border-radius: 8px; }
+
+.hidden { display: none !important; }
+
+
+@media (max-width: 768px) {
+    header { padding: 15px 20px; }
+    .hero-title { font-size: 40px; }
+    .container { flex-direction: column; margin-top: 20px; }
+    aside { width: 100%; margin-bottom: 30px; }
+    aside ul { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+    aside li { white-space: nowrap; margin-bottom: 0; }
+    main { margin-left: 0; }
+    .modal-content { flex-direction: column; text-align: center; overflow-y: auto; max-height: 90vh; gap: 20px; padding: 30px; }
+    .shop-tools { flex-direction: column; }
+}
+
+/* 捲動浮現基礎設定 */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px); /* 初始位置向下位移 */
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); /* 蘋果風格的流暢曲線 */
+}
+
+/* 當 JS 偵測到進入畫面時，會加上 active 類別 */
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 針對首頁圖片做一點縮放動畫，更有質感 */
+
+.reveal.active img {
+    transform: scale(1.05); /* 稍微放大 */
+}
+
+/* 延遲顯示：讓卡片一個一個接著出來 */
+.reveal:nth-child(1) { transition-delay: 0.1s; }
+.reveal:nth-child(2) { transition-delay: 0.2s; }
+.reveal:nth-child(3) { transition-delay: 0.3s; }
+

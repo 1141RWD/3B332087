@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store of phone | 普通手機店</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="showHome()">Store of phone</div>
+        <div class="nav-right">
+            <span onclick="switchPage('iPhone')">iPhone</span>
+            <span onclick="switchPage('配件')">配件</span>
+            <span onclick="toggleCart()">🛒 (<span id="cart-count">0</span>)</span>
+            <span id="user-display" class="login-btn" onclick="showLogin()">登入</span>
+        </div>
+    </header>
+
+    <div id="cart-sidebar">
+        <h2 style="margin-bottom: 20px;">購物車</h2>
+        <div id="cart-items-list"></div>
+        <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+            <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: 600;">
+                <span>總計</span>
+                <span id="cart-total">NT$ 0</span>
+            </div>
+            <button class="hero-btn" style="width: 100%; margin-top: 20px;" onclick="alert('結帳功能開發中')">結帳</button>
+            <p onclick="toggleCart()" style="text-align: center; margin-top: 15px; cursor: pointer; color: var(--text-gray);">關閉</p>
+        </div>
+    </div>
+
+    <div id="login-modal" class="modal" onclick="closeLogin()">
+        <div class="modal-content" style="max-width: 400px; flex-direction: column;" onclick="event.stopPropagation()">
+            <h2 style="text-align: center; margin-bottom: 10px;">會員登入</h2>
+            <p style="text-align: center; color: var(--text-gray); font-size: 14px; margin-bottom: 20px;">請輸入您的帳號與密碼</p>
+            
+            <input type="text" id="username" placeholder="帳號 / 電子郵件" 
+                   style="padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; outline: none;">
+            
+            <input type="password" id="password" placeholder="密碼" 
+                   style="padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 20px; outline: none;">
+            
+            <button class="hero-btn" style="width: 100%;" onclick="doLogin()">登入</button>
+            
+            <p style="text-align: center; margin-top: 15px; font-size: 13px; color: var(--apple-blue); cursor: pointer;">
+                忘記密碼？
+            </p>
+        </div>
+    </div>
+
+<section id="home-page">
+    <div class="hero-content reveal"> <h1 class="hero-title">iPhone 17 Pro</h1>
+        <p style="font-size: 24px; color: var(--text-gray); margin-bottom: 20px;">
+            鈦金屬。強大。這就很 iPhone。
+        </p>
+        <div class="hero-visual">
+            <img src="i17封面.png" class="hero-img active" id="hero-1">
+            <img src="i17封面2.jpg" class="hero-img" id="hero-2">
+            <img src="i17封面3.jpg" class="hero-img" id="hero-3">
+        </div>
+        <br>
+        <button class="hero-btn" onclick="switchPage('iPhone')">立即選購</button>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 80px; padding: 0 20px;">
+        <div class="feature-mini-card reveal" onclick="switchPage('iPhone')">
+            <span style="font-size: 30px;">🔋</span>
+            <h4>超強續航</h4>
+            <p>滿足全天所需</p>
+        </div>
+        <div class="feature-mini-card reveal" onclick="switchPage('iPhone')">
+            <span style="font-size: 30px;">📸</span>
+            <h4>專業相機</h4>
+            <p>10 倍混合變焦</p>
+        </div>
+        <div class="feature-mini-card reveal" onclick="switchPage('配件')">
+            <span style="font-size: 30px;">🎧</span>
+            <h4>精選配件</h4>
+            <p>完美適配設備</p>
+        </div>
+    </div>
+</section>
+
+    <div id="shop-container" class="container hidden">
+        <aside id="sidebar"></aside>
+        <main>
+            <div class="shop-tools">
+    <input
+        type="text"
+        id="search-input"
+        placeholder="搜尋商品名稱"
+        oninput="applyFilter()"
+    >
+
+    <select id="sort-select" onchange="applyFilter()">
+        <option value="">價格排序</option>
+        <option value="low">價格：低 → 高</option>
+        <option value="high">價格：高 → 低</option>
+    </select>
+</div>
+
+            <div class="product-grid" id="product-list"></div></main>
+    </div>
+
+    <div id="product-modal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div id="modal-img" style="font-size: 120px; flex: 1; text-align: center;">📱</div>
+            <div class="modal-info" style="flex: 1.5;">
+                <h2 id="modal-name"></h2>
+                <p id="modal-desc" style="color: var(--text-gray); margin-bottom: 20px;"></p>
+                <label style="font-size: 12px; font-weight: 600;">選擇容量</label>
+                <select id="modal-spec-select" style="width: 100%; padding: 10px; border-radius: 10px; margin-bottom: 20px;" onchange="updateModalPrice()"></select>
+                <div id="comparison-area">
+                    <p style="font-size: 12px; font-weight: 600;">CP 值分析 (每 GB 價格)</p>
+                    <table class="compare-table" id="compare-table-body"></table>
+                </div>
+                <div id="modal-price" style="font-size: 24px; font-weight: 600; margin: 20px 0;"></div>
+                <button class="hero-btn" style="width: 100%;" onclick="addToCart()">加入購物車</button>
+            </div>
+            <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;" onclick="closeModal()">×</span>
+        </div>
+    </div>
+<script src="main.js" defer></script>
+    
+</body>
+</html>
