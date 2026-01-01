@@ -6,17 +6,62 @@
     <title>Store of phone | 普通手機店</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
+<div id="compare-modal" class="modal" onclick="closeCompare()">
+    <div class="modal-content compare-dark" onclick="event.stopPropagation()" style="max-width: 900px; background: #1a1d23; color: white;">
+        <h2 style="text-align: center; margin-bottom: 20px;">⚖️ 規格重點比較</h2>
+        <table id="compare-detail-table">
+            </table>
+        <button class="hero-btn" style="margin-top: 20px; width: 100%;" onclick="closeCompare()">關閉比較</button>
+    </div>
+</div>
+<header>
+    <div class="logo" onclick="showHome()">Store of phone</div>
+    <div class="nav-right">
+        <div class="menu-icon" id="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+        <div class="nav-links" id="nav-links">
+            <span onclick="switchPage('iPhone')">智慧型手機</span>
+            <span onclick="switchPage('配件')">周邊配件</span>
+            <span onclick="toggleCart()">🛒 (<span id="cart-count">0</span>)</span>
+            <span id="user-display" class="login-btn" onclick="showLogin()">會員登入</span>
+        </div>
+    </div>
+</header>
+<section id="checkout-page" class="container hidden">
+    <div style="width: 100%; max-width: 800px; margin: 0 auto; background: #f9f9fb; padding: 40px; border-radius: 24px;">
+        <h2 style="margin-bottom: 30px;">訂單結帳</h2>
+        <div id="checkout-items-summary" style="margin-bottom: 20px; border-bottom: 1px solid #ddd;"></div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+            <div>
+                <h4>收件資訊</h4>
+                <input type="text" id="order-name" placeholder="收件人姓名" style="width:100%; padding:10px; margin:10px 0;">
+                <input type="text" id="order-phone" placeholder="連絡電話" style="width:100%; padding:10px; margin:10px 0;">
+            </div>
+            <div>
+                <h4>付款方式</h4>
+                <select id="payment-method" style="width:100%; padding:10px; margin:10px 0;">
+                    <option value="credit-card">信用卡 / 簽帳卡</option>
+                    <option value="line-pay">LINE Pay</option>
+                    <option value="transfer">銀行轉帳</option>
+                </select>
+                <input type="text" id="discount-code" placeholder="折扣碼 (例如: SAVE100)" style="width:100%; padding:10px; margin:10px 0;">
+            </div>
+        </div>
+        
+        <div style="text-align: right; margin-top: 30px;">
+            <h3 id="final-total">總計: NT$ 0</h3>
+            <button class="hero-btn" style="margin-top: 20px;" onclick="processOrder()">確認付款並下單</button>
+        </div>
+    </div>
+</section>
 <body>
 
-    <header>
-        <div class="logo" onclick="showHome()">Store of phone</div>
-        <div class="nav-right">
-            <span onclick="switchPage('iPhone')">iPhone</span>
-            <span onclick="switchPage('配件')">配件</span>
-            <span onclick="toggleCart()">🛒 (<span id="cart-count">0</span>)</span>
-            <span id="user-display" class="login-btn" onclick="showLogin()">登入</span>
-        </div>
-    </header>
+   
 
     <div id="cart-sidebar">
         <h2 style="margin-bottom: 20px;">購物車</h2>
@@ -26,7 +71,7 @@
                 <span>總計</span>
                 <span id="cart-total">NT$ 0</span>
             </div>
-            <button class="hero-btn" style="width: 100%; margin-top: 20px;" onclick="alert('結帳功能開發中')">結帳</button>
+            <button class="hero-btn" style="width: 100%; margin-top: 20px;" onclick="goToCheckout()">結帳</button>
             <p onclick="toggleCart()" style="text-align: center; margin-top: 15px; cursor: pointer; color: var(--text-gray);">關閉</p>
         </div>
     </div>
@@ -51,34 +96,39 @@
     </div>
 
 <section id="home-page">
-    <div class="hero-content reveal"> <h1 class="hero-title">iPhone 17 Pro</h1>
-        <p style="font-size: 24px; color: var(--text-gray); margin-bottom: 20px;">
-            鈦金屬。強大。這就很 iPhone。
-        </p>
+    <div class="hero-content reveal">
+        <h1 class="hero-title">年度旗艦登場</h1>
+        <p>iPhone 17 Pro Max<br>全新的鈦金屬配色，現正熱賣中。</p>
         <div class="hero-visual">
             <img src="i17封面.png" class="hero-img active" id="hero-1">
             <img src="i17封面2.jpg" class="hero-img" id="hero-2">
             <img src="i17封面3.jpg" class="hero-img" id="hero-3">
+            
+            <div class="hero-caption">
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                <h3 id="caption-title"></h3>
+                <p id="caption-desc"></p>
+            </div>
         </div>
-        <br>
         <button class="hero-btn" onclick="switchPage('iPhone')">立即選購</button>
     </div>
 
-    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 80px; padding: 0 20px;">
-        <div class="feature-mini-card reveal" onclick="switchPage('iPhone')">
-            <span style="font-size: 30px;">🔋</span>
-            <h4>超強續航</h4>
-            <p>滿足全天所需</p>
+
+        <div class="shop-advantages reveal">
+        <div class="adv-item">
+            <div class="icon">🚚</div>
+            <h4>全台免運</h4>
+            <p>滿 $2,000 即享黑貓宅急便免運</p>
         </div>
-        <div class="feature-mini-card reveal" onclick="switchPage('iPhone')">
-            <span style="font-size: 30px;">📸</span>
-            <h4>專業相機</h4>
-            <p>10 倍混合變焦</p>
+        <div class="adv-item">
+            <div class="icon">🛡️</div>
+            <h4>原廠保固</h4>
+            <p>所有商品皆為全新台灣公司貨</p>
         </div>
-        <div class="feature-mini-card reveal" onclick="switchPage('配件')">
-            <span style="font-size: 30px;">🎧</span>
-            <h4>精選配件</h4>
-            <p>完美適配設備</p>
+        <div class="adv-item">
+            <div class="icon">💳</div>
+            <h4>分期零利率</h4>
+            <p>支援各大銀行信用卡分期</p>
         </div>
     </div>
 </section>
@@ -104,25 +154,55 @@
             <div class="product-grid" id="product-list"></div></main>
     </div>
 
-    <div id="product-modal" class="modal" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div id="modal-img" style="font-size: 120px; flex: 1; text-align: center;">📱</div>
-            <div class="modal-info" style="flex: 1.5;">
-                <h2 id="modal-name"></h2>
-                <p id="modal-desc" style="color: var(--text-gray); margin-bottom: 20px;"></p>
-                <label style="font-size: 12px; font-weight: 600;">選擇容量</label>
-                <select id="modal-spec-select" style="width: 100%; padding: 10px; border-radius: 10px; margin-bottom: 20px;" onchange="updateModalPrice()"></select>
-                <div id="comparison-area">
-                    <p style="font-size: 12px; font-weight: 600;">CP 值分析 (每 GB 價格)</p>
-                    <table class="compare-table" id="compare-table-body"></table>
-                </div>
-                <div id="modal-price" style="font-size: 24px; font-weight: 600; margin: 20px 0;"></div>
-                <button class="hero-btn" style="width: 100%;" onclick="addToCart()">加入購物車</button>
+   <div id="product-modal" class="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div style="flex: 1; text-align: center;">
+            <div id="modal-img"></div>
+            <p id="modal-sub-desc" style="margin-top: 15px; font-size: 14px; color: var(--text-gray); line-height: 1.6;"></p>
+        </div>
+        <div class="modal-info" style="flex: 1.5;">
+            <h2 id="modal-name"></h2>
+            <p id="modal-desc" style="color: var(--text-gray); margin-bottom: 20px;"></p>
+            
+            <label style="font-size: 12px; font-weight: 600;">選擇容量</label>
+            <select id="modal-spec-select" style="width: 100%; padding: 10px; border-radius: 10px; margin-bottom: 20px;" onchange="updateModalPrice()"></select>
+            
+            <div id="comparison-area">
+                <p style="font-size: 12px; font-weight: 600;">CP 值分析 (每 GB 價格)</p>
+                <table class="compare-table" id="compare-table-body"></table>
             </div>
-            <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;" onclick="closeModal()">×</span>
+            
+            <div id="modal-price" style="font-size: 24px; font-weight: 600; margin: 20px 0;"></div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="hero-btn" style="flex: 1; background: #555;" onclick="showComparison()">重點比較</button>
+                <button class="hero-btn" style="flex: 2;" onclick="addToCart()">加入購物車</button>
+            </div>
+        </div>
+        <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;" onclick="closeModal()">×</span>
+    </div>
+</div>
+<script src="main.js" defer></script>
+    <footer>
+    <div class="footer-container">
+        <div class="footer-info">
+            <h4>Store of phone 手機專賣店</h4>
+            <p>地址：台北市信義區信義路五段 7 號 (101 大樓旁)</p>
+            <p>電話：02-1234-5678</p>
+            <p>營業時間：11:00 - 22:00 (全年無休)</p>
+        </div>
+        <div class="footer-links">
+            <h4>客戶服務</h4>
+            <ul>
+                <li>常見問題</li>
+                <li>退換貨政策</li>
+                <li>隱私權聲明</li>
+            </ul>
         </div>
     </div>
-<script src="main.js" defer></script>
-    
+    <div class="footer-bottom">
+        &copy; 2025 Store of phone 版權所有
+    </div>
+</footer>
 </body>
 </html>

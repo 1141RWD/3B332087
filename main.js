@@ -108,32 +108,39 @@ function openModal(id) {
 
     document.getElementById('modal-name').innerText = currentProduct.name;
     document.getElementById('modal-desc').innerText = currentProduct.desc;
-    // 在 main.js 的 openModal 函數內修改這行
-document.getElementById('modal-img').innerHTML = `<img src="${currentProduct.img}" style="width: 250px; height: auto; object-fit: contain;">`;
-    
+    document.getElementById('modal-sub-desc').innerText = "本產品提供原廠一年保固，搭載最新晶片技術。購買即享 14 天鑑賞期與免費到府收送維修服務。";
+    document.getElementById('modal-img').innerHTML = `<img src="${currentProduct.img}" style="width: 250px; height: auto; object-fit: contain;">`;
     const select = document.getElementById('modal-spec-select');
     select.innerHTML = currentProduct.specs.map(s => `<option value="${s.price}">${s.gb}${typeof s.gb === 'number' ? 'GB' : ''}</option>`).join('');
 
     const comp = document.getElementById('comparison-area');
     if (typeof currentProduct.specs[0].gb === 'number' && currentProduct.specs.length > 1) {
         comp.style.display = 'block';
-        const unitPrices = currentProduct.specs.map(s => s.price / s.gb);
-        const minUnit = Math.min(...unitPrices);
-        document.getElementById('compare-table-body').innerHTML = `<tr><th>容量</th><th>價格</th><th>每GB</th></tr>` + currentProduct.specs.map(s => `
-            <tr class="${(s.price / s.gb) === minUnit ? 'best-value' : ''}"><td>${s.gb}GB</td><td>$${s.price.toLocaleString()}</td><td>$${Math.round(s.price/s.gb)}</td></tr>
+        // 渲染 CP 表格並加上專屬 ID 方便高亮
+        document.getElementById('compare-table-body').innerHTML = `<tr><th>容量</th><th>價格</th><th>每GB</th></tr>` + 
+        currentProduct.specs.map(s => `
+            <tr id="row-${s.gb}"><td>${s.gb}GB</td><td>$${s.price.toLocaleString()}</td><td>$${Math.round(s.price/s.gb)}</td></tr>
         `).join('');
-    } else { 
-        comp.style.display = 'none'; 
-    }
+    } else { comp.style.display = 'none'; }
 
     updateModalPrice();
     document.getElementById('product-modal').style.display = 'flex';
 }
 
 function updateModalPrice() {
-    const price = parseInt(document.getElementById('modal-spec-select').value);
+    const select = document.getElementById('modal-spec-select');
+    const price = parseInt(select.value);
+    const selectedGB = select.options[select.selectedIndex].text.replace('GB', '');
+
     document.getElementById('modal-price').innerText = "NT$ " + price.toLocaleString();
+
+    // 先移除所有高亮
+    document.querySelectorAll('#compare-table-body tr').forEach(tr => tr.classList.remove('row-active'));
+    // 加上當前選中的高亮
+    const targetRow = document.getElementById(`row-${selectedGB}`);
+    if (targetRow) targetRow.classList.add('row-active');
 }
+
 function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
 function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
 function addToCart() {
@@ -266,15 +273,15 @@ const totalHeroes = 3;
 
 function startHeroSlideshow() {
     setInterval(() => {
-        // 移除當前圖片的 active
         document.getElementById(`hero-${currentHeroIndex}`).classList.remove('active');
-        
-        // 計算下一張圖片的索引
         currentHeroIndex = currentHeroIndex >= totalHeroes ? 1 : currentHeroIndex + 1;
-        
-        // 加入新的 active 類別
         document.getElementById(`hero-${currentHeroIndex}`).classList.add('active');
-    }, 3000); // 3000 毫秒 = 3 秒換一次
+        
+        // 同步更新文字說明
+        const data = heroData[currentHeroIndex - 1];
+        document.getElementById('caption-title').innerText = data.title;
+        document.getElementById('caption-desc').innerText = data.desc;
+    }, 4000); // 延長到 4 秒切換一次比較舒服
 }
 
 // 在網頁載入後執行
@@ -283,3 +290,66 @@ window.addEventListener('DOMContentLoaded', () => {
     // 之前教你的捲動動畫也要記得保留
     if(typeof initScrollReveal === 'function') initScrollReveal();
 });
+
+function toggleMenu() {
+    // 讓按鈕圖示變形
+    document.getElementById('hamburger').classList.toggle('active');
+    
+    // 讓導覽選單出現/消失
+    const navLinks = document.getElementById('nav-links');
+    navLinks.classList.toggle('show');
+}
+
+// 輪播資料 (讓文字隨圖片改變)
+const heroData = [
+    { title: "iPhone 17 Pro Max", desc: "全新的鈦金屬配色，現正熱賣中。" },
+    { title: "S24 Ultra AI 旗艦", desc: "最強 AI 智慧手機，工作效率倍增。" },
+    { title: "Pixel 9 Pro XL", desc: "Google 原生系統，最聰明的 AI 助理。" }
+];
+// 3. 商品比較功能 (模擬數據)
+function showComparison() {
+    const table = document.getElementById('compare-detail-table');
+    table.innerHTML = `
+        <tr><td class="feature-label">比較項目</td><td>${currentProduct.name}</td><td>同級競爭對手</td></tr>
+        <tr><td class="feature-label">建議售價</td><td>${document.getElementById('modal-price').innerText}</td><td>NT$ 42,900</td></tr>
+        <tr><td class="feature-label">處理器</td><td>搭載最新 A 系列 / AI 晶片</td><td>旗艦級 8 Gen 系列</td></tr>
+        <tr><td class="feature-label">螢幕</td><td>120Hz LTPO OLED</td><td>120Hz AMOLED</td></tr>
+        <tr><td class="feature-label">保固期限</td><td>12 個月原廠保固</td><td>12 個月原廠保固</td></tr>
+    `;
+    document.getElementById('compare-modal').style.display = 'flex';
+}
+function closeCompare() { document.getElementById('compare-modal').style.display = 'none'; }
+
+// 4. 結帳與跳轉邏輯
+function goToCheckout() {
+    if (cart.length === 0) {
+        alert("購物車是空的喔！");
+        return;
+    }
+    toggleCart(); // 關閉側邊欄
+    document.getElementById('home-page').classList.add('hidden');
+    document.getElementById('shop-container').classList.add('hidden');
+    document.getElementById('checkout-page').classList.remove('hidden');
+
+    // 渲染清單
+    const summary = document.getElementById('checkout-items-summary');
+    let total = 0;
+    summary.innerHTML = cart.map(item => {
+        total += item.price * item.quantity;
+        return `<p>${item.name} (${item.spec}) x ${item.quantity} - <b>NT$ ${(item.price * item.quantity).toLocaleString()}</b></p>`;
+    }).join('');
+    document.getElementById('final-total').innerText = "總計: NT$ " + total.toLocaleString();
+}
+function processOrder() {
+    const name = document.getElementById('order-name').value;
+    if (!name) return alert("請填寫收件人姓名");
+    
+    const orderID = "ORD-" + Math.floor(Math.random() * 1000000);
+    alert(`感謝購買！\n\n訂單編號：${orderID}\n付款人：${name}\n\n我們將儘速為您出貨。`);
+    
+    // 清空購物車並回首頁
+    cart = [];
+    updateCartUI();
+    showHome();
+    document.getElementById('checkout-page').classList.add('hidden');
+}

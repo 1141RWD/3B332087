@@ -209,3 +209,144 @@ main { flex-grow: 1; margin-left: 60px; }
 .reveal:nth-child(2) { transition-delay: 0.2s; }
 .reveal:nth-child(3) { transition-delay: 0.3s; }
 
+/* 圖片左下角說明文字 */
+.hero-caption {
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+    text-align: left;
+    color: var(--text-black);
+    z-index: 5;
+    background: rgba(255, 255, 255, 0.6); /* 半透明背景確保文字清晰 */
+    padding: 15px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    max-width: 250px;
+}
+.hero-caption h3 { font-size: 18px; margin-bottom: 5px; }
+.hero-caption p { font-size: 14px; color: #444; }
+
+/* 商店優勢區塊 */
+.shop-advantages {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+.adv-item { text-align: center; padding: 20px; }
+.adv-item .icon { font-size: 40px; margin-bottom: 10px; }
+
+/* 頁尾樣式 */
+footer {
+    background: #f5f5f7;
+    padding: 50px 20px 20px;
+    margin-top: 100px;
+    border-top: 1px solid #d2d2d7;
+}
+.footer-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+.footer-info h4, .footer-links h4 { margin-bottom: 20px; }
+.footer-links ul { list-style: none; }
+.footer-links li { margin-bottom: 10px; color: var(--text-gray); cursor: pointer; }
+.footer-bottom {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-gray);
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e2e7;
+}
+
+/* 漢堡選單基礎 (預設隱藏) */
+/* 漢堡按鈕容器 */
+.menu-icon {
+    display: none; /* 電腦版預設隱藏 */
+    width: 30px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+/* 那三條線 */
+.menu-icon span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: var(--text-black);
+    border-radius: 9px;
+    transition: .25s ease-in-out;
+}
+
+.menu-icon span:nth-child(1) { top: 0px; }
+.menu-icon span:nth-child(2) { top: 10px; }
+.menu-icon span:nth-child(3) { top: 20px; }
+
+/* 當選單被打開時 (active 狀態)，讓線條變形成 X */
+.menu-icon.active span:nth-child(1) {
+    top: 10px;
+    transform: rotate(135deg);
+}
+.menu-icon.active span:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+}
+.menu-icon.active span:nth-child(3) {
+    top: 10px;
+    transform: rotate(-135deg);
+}
+@media (max-width: 768px) {
+    .menu-icon { display: block; }
+    .nav-links {
+        display: none; /* 點擊後顯示 */
+        position: absolute;
+        top: 60px; right: 20px;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+    .nav-links.show { display: flex; }
+    .shop-advantages { grid-template-columns: 1fr; }
+}
+
+/* 容量選中時的高亮藍色 */
+.row-active {
+    background-color: var(--apple-blue) !important;
+    color: white !important;
+}
+
+/* 深色比較表 (仿車輛比較圖) */
+.compare-dark table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.compare-dark th, .compare-dark td {
+    padding: 15px;
+    border: 1px solid #2d333b;
+    text-align: center;
+}
+.compare-dark .feature-label {
+    background: #252a33;
+    color: #4dc9ff;
+    font-weight: bold;
+    text-align: left;
+    width: 30%;
+}
+
+/* 結帳頁面樣式 */
+#checkout-page input, #checkout-page select {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
