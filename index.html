@@ -7,14 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<div id="compare-modal" class="modal" onclick="closeCompare()">
-    <div class="modal-content compare-dark" onclick="event.stopPropagation()" style="max-width: 900px; background: #1a1d23; color: white;">
-        <h2 style="text-align: center; margin-bottom: 20px;">⚖️ 規格重點比較</h2>
-        <table id="compare-detail-table">
-            </table>
-        <button class="hero-btn" style="margin-top: 20px; width: 100%;" onclick="closeCompare()">關閉比較</button>
-    </div>
-</div>
+
 <header>
     <div class="logo" onclick="showHome()">Store of phone</div>
     <div class="nav-right">
@@ -27,7 +20,7 @@
             <span onclick="switchPage('iPhone')">智慧型手機</span>
             <span onclick="switchPage('配件')">周邊配件</span>
             <span onclick="toggleCart()">🛒 (<span id="cart-count">0</span>)</span>
-            <span id="user-display" class="login-btn" onclick="showLogin()">會員登入</span>
+            <span id="user-display" class="login-btn" onclick="handleUserClick()">會員登入</span>
         </div>
     </div>
 </header>
@@ -57,6 +50,13 @@
             <h3 id="final-total">總計: NT$ 0</h3>
             <button class="hero-btn" style="margin-top: 20px;" onclick="processOrder()">確認付款並下單</button>
         </div>
+    </div>
+</section>
+<section id="info-page" class="container hidden">
+    <div style="width: 100%; max-width: 800px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 24px; line-height: 2;">
+        <h2 id="info-title" style="margin-bottom: 20px; border-bottom: 2px solid #f5f5f7; padding-bottom: 10px;"></h2>
+        <div id="info-content" style="color: #444;"></div>
+        <button class="hero-btn" style="margin-top: 30px;" onclick="showHome()">回到首頁</button>
     </div>
 </section>
 <body>
@@ -97,21 +97,19 @@
 
 <section id="home-page">
     <div class="hero-content reveal">
-        <h1 class="hero-title">年度旗艦登場</h1>
-        <p>iPhone 17 Pro Max<br>全新的鈦金屬配色，現正熱賣中。</p>
-        <div class="hero-visual">
-            <img src="i17封面.png" class="hero-img active" id="hero-1">
-            <img src="i17封面2.jpg" class="hero-img" id="hero-2">
-            <img src="i17封面3.jpg" class="hero-img" id="hero-3">
-            
-            <div class="hero-caption">
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                <h3 id="caption-title"></h3>
-                <p id="caption-desc"></p>
-            </div>
+    <h1 class="hero-title">年度旗艦登場</h1>
+    <p>iPhone 17 Pro Max<br>全新的鈦金屬配色，現正熱賣中。</p>
+    <div class="hero-visual" style="height: 500px; position: relative;"> <img src="i17封面2.jpg" class="hero-img active" id="hero-1">
+        <img src="i7封面2-2-2.jpg" class="hero-img" id="hero-2">
+        <img src="i17封面3-3.jpg" class="hero-img" id="hero-3">
+        
+        <div class="hero-caption" style="position: absolute; bottom: 20px; left: 20px;">
+            <h3 id="caption-title">iPhone 17 Pro Max</h3>
+            <p id="caption-desc">全新的鈦金屬配色，現正熱賣中。</p>
         </div>
-        <button class="hero-btn" onclick="switchPage('iPhone')">立即選購</button>
     </div>
+    <button class="hero-btn" onclick="switchPage('iPhone')">立即選購</button>
+</div>
 
 
         <div class="shop-advantages reveal">
@@ -175,14 +173,31 @@
             <div id="modal-price" style="font-size: 24px; font-weight: 600; margin: 20px 0;"></div>
             
             <div style="display: flex; gap: 10px;">
-                <button class="hero-btn" style="flex: 1; background: #555;" onclick="showComparison()">重點比較</button>
+               
                 <button class="hero-btn" style="flex: 2;" onclick="addToCart()">加入購物車</button>
             </div>
         </div>
         <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;" onclick="closeModal()">×</span>
     </div>
 </div>
+<div id="compare-bar" style="position: fixed; bottom: 20px; right: 20px; z-index: 2500; display: none;">
+    <div style="background: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px;">
+        <span style="font-weight: 600;">已選擇 <span id="compare-count">0</span> 項商品</span>
+        <button class="hero-btn" style="padding: 8px 20px; font-size: 14px;" onclick="openCompareManager()">立即比較</button>
+        <button onclick="clearCompare()" style="background: none; border: none; color: gray; cursor: pointer; font-size: 12px;">清空</button>
+    </div>
+</div>
+
+<div id="compare-manager-modal" class="modal" onclick="closeCompareManager()">
+    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 90%; width: 1000px; flex-direction: column;">
+        <h2 style="text-align: center; margin-bottom: 20px;">規格對照表</h2>
+        <div id="compare-table-container" style="overflow-x: auto;"></div>
+        <button class="hero-btn" style="margin-top: 20px; width: 100%;" onclick="closeCompareManager()">關閉</button>
+    </div>
+</div>
 <script src="main.js" defer></script>
+
+
     <footer>
     <div class="footer-container">
         <div class="footer-info">
@@ -192,17 +207,18 @@
             <p>營業時間：11:00 - 22:00 (全年無休)</p>
         </div>
         <div class="footer-links">
-            <h4>客戶服務</h4>
-            <ul>
-                <li>常見問題</li>
-                <li>退換貨政策</li>
-                <li>隱私權聲明</li>
-            </ul>
-        </div>
+    <h4>客戶服務</h4>
+    <ul>
+        <li onclick="switchInfoPage('faq')">常見問題</li>
+        <li onclick="switchInfoPage('return')">退換貨政策</li>
+        <li onclick="switchInfoPage('privacy')">隱私權聲明</li>
+    </ul>
+</div>
     </div>
     <div class="footer-bottom">
         &copy; 2025 Store of phone 版權所有
     </div>
+    
 </footer>
 </body>
 </html>
